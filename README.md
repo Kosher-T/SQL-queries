@@ -100,6 +100,103 @@ The primary query aims to identify which product categories generated the highes
 
 The "total_gain" and the price adjustment mechanism are specific to this script's analytical goals. They represent a custom calculation rather than a standard financial or sales metric. The interpretation of the results should be made in the context of this specific price adjustment logic.
 
+## Bean Data Analysis SQL Project
+
+This project contains a SQL script for creating a table named `beans`, populating it with sample data, and then running a complex query to analyze this data. The primary goal of the query is to identify bean brands that exhibit consistent density under specific conditions related to their diameter and shade.
+
+### Table of Contents
+
+- [Database Schema](#database-schema)
+- [Sample Data](#sample-data)
+- [Query Explanation](#query-explanation)
+- [How to Use](#how-to-use)
+- [Contributing](#contributing)
+
+### Database Schema
+
+The script first defines a table named `beans` with the following columns:
+
+* `brand`: VARCHAR(50) - The brand name of the bean.
+* `density`: DECIMAL(4, 3) - The density of the bean. This is a decimal number with a precision of 4 digits in total, with 3 digits after the decimal point.
+* `diameter_wide`: DECIMAL(4, 3) - The wider diameter measurement of the bean. This is a decimal number with a precision of 4 digits in total, with 3 digits after the decimal point.
+* `shade`: VARCHAR(10) - The shade description of the bean (e.g., 'light', 'dark', 'semi-dark').
+
+### Sample Data
+
+The script then inserts 16 rows of sample data into the `beans` table, representing different beans with their respective brands, densities, diameters, and shades.
+
+Brands included in the sample data:
+* Shllips
+* Stevenspus
+* Hadelia
+* Gorazora
+
+### Query Explanation
+
+The core of this project is the `SELECT` statement, which performs an analysis to find bean brands with a low standard deviation in density under certain conditions. Let's break down the query:
+
+1.  **Innermost Subquery (Calculating Averages):**
+    * `(SELECT AVG(density) FROM beans)`: Calculates the average density of all beans in the table.
+    * `(SELECT AVG(diameter_wide) FROM beans)`: Calculates the average wider diameter of all beans in the table.
+
+2.  **Filtering Conditions (Inner `SELECT` statement's `WHERE` clause):**
+    The query first filters the beans based on the following criteria:
+    * `diameter_wide > (SELECT AVG(diameter_wide) FROM beans)`: It only considers beans whose wider diameter is greater than the average wider diameter of all beans.
+    * And either of these conditions must be met:
+        * `shade = 'light' AND (density/diameter_wide) > 0.1`: If the bean shade is 'light', its density to wider diameter ratio must be greater than 0.1.
+        * `shade = 'dark'`: Or, the bean shade is 'dark' (no additional ratio condition for dark beans).
+
+3.  **Calculating Standard Deviation (`STD`):**
+    * `ROUND(((SUM((density - (SELECT AVG(density) FROM beans)) * (density - (SELECT AVG(density) FROM beans)))) / COUNT(density)), 3) AS STD`
+    * This part of the query calculates a measure of dispersion for the `density` of the filtered beans for each `brand`.
+    * It calculates the sum of the squared differences between each bean's density and the overall average density of *all* beans (as calculated in the innermost subquery).
+    * This sum is then divided by the count of beans *within that filtered group for the brand*.
+    * The result is rounded to 3 decimal places and aliased as `STD`.
+    * **Note:** This is a custom calculation for dispersion. While it's labeled `STD` (Standard Deviation), the formula used here is more akin to a population variance calculation if `(SELECT AVG(density) FROM beans)` were the mean of the *current group* rather than the *overall population*. However, it's using the overall average density as the central point for measuring deviation. If the intention is a true standard deviation for the *filtered group*, the `AVG(density)` within the `STD` calculation should ideally be from the filtered beans for that brand, or a standard deviation aggregate function (like `STDDEV_POP` or `STDDEV_SAMP`, depending on the SQL dialect) should be used on the `density` of the filtered beans. As written, it measures how much the density of the *filtered beans for a brand* deviates from the *overall average density of all beans*.
+
+4.  **Grouping:**
+    * `GROUP BY brand`: The results are then grouped by `brand`, so the `STD` is calculated for each distinct bean brand that has beans meeting the filtering criteria.
+
+5.  **Filtering Groups (`HAVING` clause):**
+    * `HAVING STD < 0.1`: Only brands where the calculated `STD` (as defined above) is less than 0.1 are included in the final result. This selects brands with relatively low variation in density among their qualifying beans, according to the custom `STD` metric.
+
+6.  **Ordering:**
+    * `ORDER BY STD ASC`: The final results are ordered by the calculated `STD` in ascending order, meaning brands with the lowest `STD` (most consistent density according to the metric) will appear first.
+
+**In summary, the query aims to identify bean brands that have beans which:**
+* Are wider than average.
+* AND are either:
+    * 'light' in shade with a density/diameter_wide ratio > 0.1.
+    * 'dark' in shade.
+* AND exhibit a low variation (custom `STD` < 0.1) in their density when compared to the overall average density of all beans.
+
+### How to Use
+
+1.  **Database Setup:** Ensure you have a SQL database system (e.g., PostgreSQL, MySQL, SQLite, SQL Server) running.
+2.  **Connect to Database:** Connect to your database using a SQL client or interface.
+3.  **Run the Script:** Execute the provided SQL code. This will:
+    * Create the `beans` table.
+    * Insert the sample data into the table.
+    * Run the analysis query and display the results.
+
+The output will be a table showing the `brand` and its calculated `STD` for brands that meet all the specified criteria.
+
+### Modifying the Query
+
+The `STD` calculation in the query is a custom one. Depending on the specific SQL dialect you are using (e.g., PostgreSQL, MySQL, SQL Server, Oracle), there might be built-in functions for standard deviation (like `STDDEV_SAMP()` for sample standard deviation or `STDDEV_POP()` for population standard deviation) that you might prefer to use for a more standard statistical measure.
+
+If you intend to calculate the standard deviation of density *for each group of filtered beans* around *that group's own average density*, the `STD` calculation would need to be adjusted. For example, in PostgreSQL or MySQL, you might replace the custom `STD` calculation with `ROUND(STDDEV_POP(density), 3) AS STD` and remove the reliance on the overall `AVG(density)` from the outer select for this specific calculation (though it's still used in the filtering).
+
+### Contributing
+
+Contributions to this project are welcome (though I can't imagine what you'd want to change)! If you have suggestions for improving the query, adding more complex analyses, or refining the dataset, please feel free to:
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/YourFeature`).
+3.  Commit your changes (`git commit -m 'Add some feature'`).
+4.  Push to the branch (`git push origin feature/YourFeature`).
+5.  Open a Pull Request.
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
