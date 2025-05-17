@@ -49,3 +49,11 @@ The primary query aims to identify locations that have experienced earthquakes w
 ### Disclaimer
 
 The `avg_magnitude` calculated in this script is based on a custom formula specific to this analysis. It should not be confused with standard seismological magnitude scales like the Richter scale or Moment Magnitude scale, which have different, well-established formulas and physical bases.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Contact
+
+For any questions, reach out via itorousa@gmail.com
