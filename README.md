@@ -185,7 +185,7 @@ The output will be a table showing the `brand` and its calculated `STD` for bran
 
 The `STD` calculation in the query is a custom one. Depending on the specific SQL dialect you are using (e.g., PostgreSQL, MySQL, SQL Server, Oracle), there might be built-in functions for standard deviation (like `STDDEV_SAMP()` for sample standard deviation or `STDDEV_POP()` for population standard deviation) that you might prefer to use for a more standard statistical measure.
 
-If you intend to calculate the standard deviation of density *for each group of filtered beans* around *that group's own average density*, the `STD` calculation would need to be adjusted. For example, in PostgreSQL or MySQL, you might replace the custom `STD` calculation with `ROUND(STDDEV_POP(density), 3) AS STD` and reove the reliance on the overall `AVG(density)` from the outer select for this specific calculation (though it's still used in the filtering).
+If you intend to calculate the standard deviation of density *for each group of filtered beans* around *that group's own average density*, the `STD` calculation would need to be adjusted. For example, in PostgreSQL or MySQL, you might replace the custom `STD` calculation with `ROUND(STDDEV_POP(density), 3) AS STD` and remove the reliance on the overall `AVG(density)` from the outer select for this specific calculation (though it's still used in the filtering).
 
 ### Contributing
 
