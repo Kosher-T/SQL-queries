@@ -2,6 +2,9 @@
 
 I have begun learning SQL from [Coddy](coddy.tech), and this is where I'll post my progress over time. This repo will contain my micro projects in my quest for proficiency in SQL.
 
+
+
+
 ## Earthquake Data Analysis SQL Script
 
 ### Overview
@@ -49,6 +52,10 @@ The primary query aims to identify locations that have experienced earthquakes w
 ### Disclaimer
 
 The `avg_magnitude` calculated in this script is based on a custom formula specific to this analysis. It should not be confused with standard seismological magnitude scales like the Richter scale or Moment Magnitude scale, which have different, well-established formulas and physical bases.
+
+
+
+
 
 ## Shop Data Analysis with Price Adjustment SQL Script
 
@@ -99,6 +106,10 @@ The primary query aims to identify which product categories generated the highes
 ### Note on Calculation
 
 The "total_gain" and the price adjustment mechanism are specific to this script's analytical goals. They represent a custom calculation rather than a standard financial or sales metric. The interpretation of the results should be made in the context of this specific price adjustment logic.
+
+
+
+
 
 ## Bean Data Analysis SQL Project
 
@@ -187,6 +198,20 @@ The `STD` calculation in the query is a custom one. Depending on the specific SQ
 
 If you intend to calculate the standard deviation of density *for each group of filtered beans* around *that group's own average density*, the `STD` calculation would need to be adjusted. For example, in PostgreSQL or MySQL, you might replace the custom `STD` calculation with `ROUND(STDDEV_POP(density), 3) AS STD` and remove the reliance on the overall `AVG(density)` from the outer select for this specific calculation (though it's still used in the filtering).
 
+### Contributing
+
+Contributions to this project are welcome (though I can't imagine what you'd want to change)! If you have suggestions for improving the query, adding more complex analyses, or refining the dataset, please feel free to:
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/YourFeature`).
+3.  Commit your changes (`git commit -m 'Add some feature'`).
+4.  Push to the branch (`git push origin feature/YourFeature`).
+5.  Open a Pull Request.
+
+
+
+
+
 ## Student Grade Analysis SQL
 
 This project provides a simple SQL schema and query to store and analyze student grades. It includes table definitions for `grades` and `students`, sample data, and a query to calculate the average grade for each student.
@@ -217,16 +242,6 @@ CREATE TABLE grades (
     grade INT
 );
 ```
-
-### Contributing
-
-Contributions to this project are welcome (though I can't imagine what you'd want to change)! If you have suggestions for improving the query, adding more complex analyses, or refining the dataset, please feel free to:
-
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/YourFeature`).
-3.  Commit your changes (`git commit -m 'Add some feature'`).
-4.  Push to the branch (`git push origin feature/YourFeature`).
-5.  Open a Pull Request.
 
 ## License
 
