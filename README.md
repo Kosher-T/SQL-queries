@@ -218,6 +218,20 @@ This project provides a simple SQL schema and query to store and analyze student
 
 ---
 
+### Table of Contents 📑
+
+* [Database Schema](#database-schema-)
+    * [`grades`](#grades)
+    * [`students`](#students)
+* [Sample Data](#sample-data-)
+    * [`grades` Data](#grades-data)
+    * [`students` Data](#students-data)
+* [Query](#query-)
+* [How to Use](#how-to-use-)
+* [Contributing](#contributing-)
+
+---
+
 ### Database Schema 📜
 
 The database consists of two tables:
@@ -242,6 +256,13 @@ CREATE TABLE grades (
     grade INT
 );
 ```
+
+
+
+
+
+
+
 
 ## License
 
