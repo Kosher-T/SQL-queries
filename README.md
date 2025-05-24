@@ -187,6 +187,37 @@ The `STD` calculation in the query is a custom one. Depending on the specific SQ
 
 If you intend to calculate the standard deviation of density *for each group of filtered beans* around *that group's own average density*, the `STD` calculation would need to be adjusted. For example, in PostgreSQL or MySQL, you might replace the custom `STD` calculation with `ROUND(STDDEV_POP(density), 3) AS STD` and remove the reliance on the overall `AVG(density)` from the outer select for this specific calculation (though it's still used in the filtering).
 
+# Student Grade Analysis SQL
+
+This project provides a simple SQL schema and query to store and analyze student grades. It includes table definitions for `grades` and `students`, sample data, and a query to calculate the average grade for each student.
+
+---
+
+## Database Schema 📜
+
+The database consists of two tables:
+
+### `grades`
+
+This table stores the grades of students for different courses.
+
+| Column      | Data Type | Constraints        | Description                                  |
+|-------------|-----------|--------------------|----------------------------------------------|
+| `id`        | INTEGER   | PRIMARY KEY AUTOINCREMENT | Unique identifier for each grade entry.    |
+| `course_id` | INT       |                    | Identifier for the course.                   |
+| `student_id`| INT       |                    | Identifier for the student.                  |
+| `grade`     | INT       |                    | The grade received by the student in the course. |
+
+**SQL Definition:**
+```sql
+CREATE TABLE grades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, -- Adding a primary key column, often good practice
+    course_id INT,
+    student_id INT,
+    grade INT
+);
+```
+
 ### Contributing
 
 Contributions to this project are welcome (though I can't imagine what you'd want to change)! If you have suggestions for improving the query, adding more complex analyses, or refining the dataset, please feel free to:
