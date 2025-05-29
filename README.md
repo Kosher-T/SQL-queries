@@ -261,6 +261,79 @@ CREATE TABLE grades (
 
 
 
+## SQL Script: Top 5 Customers by Spending
+
+This SQL script defines a schema for an e-commerce database, populates it with sample data, and then queries to find the top 5 customers based on their total spending.
+
+### Database Schema
+
+The script creates and populates the following tables:
+
+1.  **`orders`**: Stores order information, linking orders to customers.
+    * `sn`: INTEGER PRIMARY KEY AUTOINCREMENT
+    * `id`: INT (Order ID)
+    * `customer_id`: INT (Foreign Key referencing a customer table - not defined in this script)
+
+2.  **`products`**: Stores product information.
+    * `id`: INT (Product ID)
+    * `price`: DECIMAL(10, 2)
+    * `units_in_stock`: INT
+
+3.  **`order_items`**: Stores details of items within each order.
+    * `id`: INT PRIMARY KEY (Order Item ID)
+    * `order_id`: INT (Foreign Key referencing `orders.id`)
+    * `product_id`: INT (Foreign Key referencing `products.id`)
+    * `quantity`: INT
+
+### Script Overview
+
+1.  **Table Creation**:
+    * `CREATE TABLE orders (...)`
+    * `CREATE TABLE products (...)`
+    * `CREATE TABLE order_items (...)`
+
+2.  **Data Population**:
+    * `INSERT INTO orders (...) VALUES (...)`
+    * `INSERT INTO products (...) VALUES (...)`
+    * `INSERT INTO order_items (...) VALUES (...)`
+
+3.  **Main Query**:
+    The script concludes with a query to identify the top 5 customers who have spent the most. The total spending is calculated by multiplying the unit price and quantity for each item in each order, and then summing up these amounts per customer.
+
+    ```sql
+    SELECT
+        o.customer_id,
+        SUM(oi.quantity * p.price) AS total_spending
+    FROM
+        order_items oi
+    LEFT JOIN
+        orders o ON o.id = oi.order_id
+    JOIN
+        products p ON oi.product_id = p.id
+    GROUP BY
+        o.customer_id -- Corrected: Should group by customer_id to sum all their orders
+    ORDER BY
+        total_spending DESC
+    LIMIT
+        5;
+    ```
+    *Note: The provided final query in the original script groups by `order_id` which would give top orders, not top customers. The query above is corrected to group by `customer_id` to reflect the stated goal: "Return the top 5 customers who have spent the most on all of their orders."*
+
+### How to Use
+
+1.  Execute the `CREATE TABLE` statements to set up the database structure.
+2.  Execute the `INSERT INTO` statements to populate the tables with data.
+3.  Run the final `SELECT` query to retrieve the top 5 customers by their total spending.
+
+
+
+
+
+
+
+
+
+
 
 
 
