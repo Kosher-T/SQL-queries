@@ -1,3 +1,4 @@
+```sql
 CREATE TABLE beans (
     brand VARCHAR(50),
     density DECIMAL(4, 3),
