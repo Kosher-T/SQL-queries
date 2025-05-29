@@ -261,7 +261,7 @@ CREATE TABLE grades (
 
 
 
-## SQL Script: Top 5 Customers by Spending
+## SQL Script: Sales Data Analysis
 
 This SQL script defines a schema for an e-commerce database, populates it with sample data, and then queries to find the top 5 customers based on their total spending.
 
